@@ -429,9 +429,9 @@ function meterOf(sig){
 }
 /* ── 도형 ── */
 var BTPAT={2:{L:0,R:0},3:{L:0,R:1},4:{L:1,R:1},5:{L:1,R:2},6:{L:2,R:2},7:{L:2,R:3},8:{L:3,R:3},9:{L:3,R:4},12:{L:5,R:5}};
-function split(m){var mid=Math.max(0,m-2),p=BTPAT[m];if(p)return p;var L=Math.floor(mid/2);if(mid>=2)L=Math.max(1,Math.min(mid-1,L));return {L:L,R:mid-L};}
+function split(m){var mid=Math.max(0,m-2);if(m<=2)return {L:0,R:0};if(m===3)return {L:0,R:1};if(m===4)return {L:1,R:1};var lo=1,hi=mid-1,p=BTPAT[m];if(p)return {L:Math.max(lo,Math.min(hi,p.L)),R:mid-Math.max(lo,Math.min(hi,p.L))};var L=Math.max(lo,Math.min(hi,Math.floor(mid/2)));return {L:L,R:mid-L};}
 function points(m,s){
-  var sp=split(m),L=sp.L,R=sp.R,CX=150,TOP=74,BOT=182,LX=54,RX=246,pts=[[CX,BOT]],i;
+  var sp=split(m),L=sp.L,R=sp.R,CX=150,TOP=74,BOT=168,LX=54,RX=246,pts=[[CX,BOT]],i;
   for(i=0;i<L;i++){var a=(L===1)?1:(i/(L-1)),t=(L===1)?1:(0.38+0.62*a);pts.push([CX-(CX-LX)*t,BOT-(BOT-TOP)*(0.18+0.30*a)]);}
   for(i=0;i<R;i++){var b=(R===1)?1:(i/(R-1)),u=(R===1)?1:(0.38+0.62*b);pts.push([CX+(RX-CX)*u,BOT-(BOT-TOP)*(0.20+0.42*b)]);}
   pts.push([CX,TOP]);s=s||1;
