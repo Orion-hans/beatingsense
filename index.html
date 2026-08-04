@@ -255,8 +255,8 @@ input[type=range]{accent-color:var(--mint);flex:1;min-width:110px}
       <div class="live" id="live"></div>
     </div>
     <div class="panel">
-      <div class="pills" id="grpTabs"></div>
-      <div class="ctlrow"><select class="gsel" id="emoS" style="flex:1"></select></div>
+      <div class="ctlrow"><select class="gsel" id="grpS" style="flex:1"></select></div>
+      <div class="pills" id="emoPills" style="margin-top:9px"></div>
       <div class="ctlrow">
         <select class="gsel" id="sig"></select>
         <select class="gsel" id="grp"></select>
@@ -666,12 +666,13 @@ function emoCard(){
   $('live').textContent=e.n+' — '+e.tx+' · '+e.sz;
 }
 function buildEmoSel(){
-  var g='<button class="pill gtab'+(ST.grp==='ALL'?' on':'')+'" data-g="ALL">전체</button>';
-  GROUPS.forEach(function(x){g+='<button class="pill gtab'+(ST.grp===x.id?' on':'')+'" data-g="'+x.id+'">'+x.name+'</button>';});
-  $('grpTabs').innerHTML=g;
+  var cur=ST.emo.g,o='';
+  GROUPS.forEach(function(x){
+    o+='<option value="'+x.id+'"'+(cur===x.id?' selected':'')+'>'+x.name+'</option>';});
+  $('grpS').innerHTML=o;
   var e='';EMO.forEach(function(x,i){
-    if(ST.grp==='ALL'||x.g===ST.grp)e+='<option value="'+i+'"'+(x.n===ST.emo.n?' selected':'')+'>'+x.n+(ST.grp==='ALL'?' \u00b7 '+(GROUPS.filter(function(q){return q.id===x.g;})[0]||{}).name:'')+'</option>';});
-  $('emoS').innerHTML=e;
+    if(x.g===cur)e+='<button class="pill'+(x.n===ST.emo.n?' on':'')+'" data-i="'+i+'">'+x.n+'</button>';});
+  $('emoPills').innerHTML=e;
 }
 /* ── 축 좁히기 ── */
 var AXS={b:null,t:null,e:null};
@@ -843,11 +844,12 @@ $('sig').addEventListener('change',function(){CUR.sig=this.value;CUR.gi=0;buildS
 $('grp').addEventListener('change',function(){CUR.gi=+this.value;_n=0;render(meterOf(CUR.sig).n,ST.sz);});
 $('bpm').addEventListener('input',function(){$('bpmv').textContent=this.value;});
 $('play').addEventListener('click',toggle);
-$('grpTabs').addEventListener('click',function(ev){var b=ev.target.closest('.gtab');if(!b)return;
-  ST.grp=b.getAttribute('data-g');
-  if(ST.grp!=='ALL'){var list=EMO.filter(function(x){return x.g===ST.grp;});if(list.length)ST.emo=list[0];}
+$('grpS').addEventListener('change',function(){
+  var v=this.value,list=EMO.filter(function(x){return x.g===v;});
+  if(list.length)ST.emo=list[0];
   buildEmoSel();buildChips();emoCard();lhSync();});
-$('emoS').addEventListener('change',function(){ST.emo=EMO[+this.value];buildEmoSel();buildChips();emoCard();lhSync();});
+$('emoPills').addEventListener('click',function(ev){var b=ev.target.closest('.pill');if(!b)return;
+  ST.emo=EMO[+b.getAttribute('data-i')];buildEmoSel();buildChips();emoCard();lhSync();});
 buildChips();buildEmoSel();buildSel();emoCard();principleCard();varCard();lhSync();render(meterOf(CUR.sig).n,ST.sz);
 </script>
 </body>
