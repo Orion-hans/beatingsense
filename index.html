@@ -267,7 +267,7 @@ input[type=range]{accent-color:var(--mint);flex:1;min-width:110px}
       <div class="ctlrow"><span class="lb">축적</span><span class="pills"><button class="pill gw on" data-g="">끔</button><button class="pill gw" data-g="4">4마디</button><button class="pill gw" data-g="8">8마디</button></span></div>
       <div class="sect">왼손 과제</div>
       <div class="pills" id="lhBtns" style="margin-top:8px">
-        <button class="pill lhx on" data-x="emo">감정 따라</button>
+        <button class="pill lhx on" data-x="emo">정서어</button>
         <button class="pill lhx" data-x="hold">정지(중립)</button>
         <button class="pill lhx" data-x="cresc">크레셴도</button>
         <button class="pill lhx" data-x="dim">디크레셴도</button>
@@ -487,7 +487,7 @@ function lhOptHTML(){
 }
 function lhSync(){
   var m=meterOf(CUR.sig).n;
-  var LAB={emo:'감정 따라',hold:'정지(중립)',
+  var LAB={emo:'정서어 · '+ST.emo.n,hold:'정지(중립)',
     cresc:'크레셴도 · '+LH.cBars+'마디@'+LH.cFrom,
     dim:'디크레셴도 · '+LH.cBars+'마디@'+LH.cFrom,
     cue:'큐 · '+(LH.cue<0?'마지막':(Math.min(LH.cue,m-1)+1))+'박',
