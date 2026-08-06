@@ -752,16 +752,20 @@ function dotAt(bp, n, ratio, grow, isPrep){
       var sm = smoothAt(pts, bi, n, te);            /* 파시브 — 점을 돌아 흐른다 */
       xx = sm[0]; yy = sm[1];
       var ly0 = p0[1] + (p1[1] - p0[1]) * te;
-      if(yy > ly0 - 3) yy = ly0 - 3 - (yy - ly0) * 0.5;   /* 처지지 않게 — 지휘는 위로 튄다 */
+      var sag = yy - ly0;
+      if(sag > 6) yy = ly0 + 6 + (sag - 6) * 0.25;   /* 심하게 처질 때만 완만히 잡아준다 */
     } else {
       xx = p0[0] + (p1[0] - p0[0]) * te + off;
       yy = p0[1] + (p1[1] - p0[1]) * te - arc;
     }
     if(!S.sec){                                     /* 짧은 구간을 넓게 돌아 동선을 맞춘다 */
-      var bw = Math.max(bowFor(pts, bi, n) * (0.55 + 0.45 * TF), 13 * DY * TF * (0.86 + 0.2 * W));
+      var bw = 0;
+      if(S.act){                                     /* 부풀림은 악티브만 — 파시브는 등속이 성격이다 */
+        bw = Math.max(bowFor(pts, bi, n) * (0.55 + 0.45 * TF), 13 * DY * TF * (0.86 + 0.2 * W));
+      }
       if(bw > 0.5){
         var dx = p1[0] - p0[0], dy = p1[1] - p0[1], dn = Math.hypot(dx, dy) || 1;
-        var s2 = reboundCurve(te, S.act ? 0.28 : 0.38) * bw;
+        var s2 = (S.act ? reboundCurve(te, 0.28) : Math.sin(Math.PI * te)) * bw;
         var px = -dy / dn, py = dx / dn;
         if(py > 0){ px = -px; py = -py; }            /* 부풀림은 언제나 위쪽으로 — 익투스 뒤에는 튀어 오른다 */
         var hx = px * 0.45;                          /* 옆으로는 조금만 */
