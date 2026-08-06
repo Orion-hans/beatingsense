@@ -202,6 +202,22 @@ header{text-align:center;margin:6px 0 16px}
 .sigdot{width:34px;height:34px;border-radius:50%;border:2px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--muted);transition:transform .08s,background .08s,border-color .08s}
 .sigdot.prep{border-color:var(--amber);border-style:dashed;color:var(--amber)}
 .sigdot.cue{background:var(--amber);border-color:var(--amber);color:#0b0f12;transform:scale(1.3)}
+.planbox{margin-top:11px;border-top:1px solid var(--line);padding-top:10px}
+.planrow{margin:0 0 9px}
+.planh{font-size:.64rem;font-weight:800;color:var(--muted);letter-spacing:.1em;margin-bottom:5px}
+.plangrid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.pb{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:44px;text-align:center;background:rgba(255,255,255,.045);border:1px solid var(--line);border-radius:9px;padding:5px 3px}
+.pb i{font-style:normal;font-size:.58rem;font-weight:800;color:var(--mint);letter-spacing:.04em}
+.pb b{font-size:.62rem;font-weight:700;color:var(--text);line-height:1.28}
+.gorow{margin:0 0 10px}
+.gorow .gobtn{width:100%}
+.emopanel{padding-bottom:0}
+.emohead{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:2px 0 10px;font-size:.86rem;font-weight:800;color:var(--text)}
+.emohead .ch{color:var(--muted);font-size:.8rem}
+.emopanel.closed .emobody{display:none}
+.emopanel.closed .emohead{padding-bottom:2px}
+.emopanel.closed .ch{transform:rotate(-90deg)}
+.artlab{display:block;font-size:.6rem;font-weight:700;color:var(--muted);letter-spacing:.04em;margin-top:2px}
 .sigcap{font-size:.625rem;font-weight:700;color:var(--muted)}
 .gaugebox{position:absolute;bottom:0;left:0;right:0;height:66%;overflow:hidden;display:flex;align-items:flex-end}
 .cutdot{position:absolute;left:50%;top:4px;transform:translateX(-50%);width:16px;height:16px;border-radius:50%;background:#ff8f7a;z-index:4;animation:cutbl .28s steps(2,end) infinite}
@@ -313,21 +329,15 @@ input[type=range]{accent-color:var(--mint);flex:1;min-width:110px}
 
   <!-- 비팅 -->
   <div id="pBeat">
-    <div class="panel">
-      <div class="gstage">
-        <div class="lhcol"><div class="cap">왼손<b id="lhTag"></b></div>
-          <div class="track"><div class="sigbox"><div class="sigdot" id="gSig"><span id="gSigN">–</span></div><div class="sigcap" id="gSigT">큐 없음</div></div><div class="gaugebox"><div class="fill" id="fill"></div><div class="tgt hide" id="tgt"></div><div class="hmark" id="hmark"></div><div class="cutdot hide" id="cutdot"></div><div class="inlab" id="inlab"></div></div></div></div>
-        <div class="rhcol"><div class="cap">오른손</div><div id="svgWrap"></div><div class="beatn" id="beatn">–</div></div>
-      </div>
-      <div class="live" id="live"></div>
-    </div>
-    <div class="panel">
-      <div class="ctlrow"><select class="gsel" id="grpS" style="flex:1"></select></div>
-      <div class="pills" id="emoPills" style="margin-top:9px"></div>
-      <div class="ctlrow">
+    <div class="panel emopanel" id="emoPanel">
+      <div class="emohead" id="emoHead"><span id="emoHeadT">설정</span><span class="ch" id="emoCh">▾</span></div>
+      <div class="emobody" id="emoBody">
+        <div class="ctlrow"><select class="gsel" id="grpS" style="flex:1"></select></div>
+        <div class="pills" id="emoPills" style="margin-top:9px"></div>
+        <div class="ctlrow">
         <select class="gsel" id="sig"></select>
         <select class="gsel" id="grp"></select>
-        <button class="gobtn" id="play">▶ 시작</button>
+        
       </div>
       <div class="ctlrow"><span class="lb">빠르기</span><input type="range" id="bpm" min="40" max="180" value="84"><span id="bpmv" style="font-size:.8125rem;color:var(--muted);min-width:3em;text-align:right">84</span></div>
       <div class="ctlrow"><span class="lb">크기</span><span class="pills"><button class="pill sz" data-s="0.72">작게</button><button class="pill sz on" data-s="1">보통</button><button class="pill sz" data-s="1.26">크게</button></span></div>
@@ -342,6 +352,19 @@ input[type=range]{accent-color:var(--mint);flex:1;min-width:110px}
         <button class="pill lhx" data-x="sus">지속음</button>
       </div>
       <div class="ctlrow" id="lhOpt"></div>
+    
+      </div>
+    </div>
+    <div class="ctlrow gorow"><button class="gobtn" id="play">▶ 시작</button></div>
+    <div class="panel">
+      <div class="gstage">
+        <div class="lhcol"><div class="cap">왼손<b id="lhTag"></b></div>
+          <div class="track"><div class="sigbox"><div class="sigdot" id="gSig"><span id="gSigN">–</span></div><div class="sigcap" id="gSigT">큐 없음</div></div><div class="gaugebox"><div class="fill" id="fill"></div><div class="tgt hide" id="tgt"></div><div class="hmark" id="hmark"></div><div class="cutdot hide" id="cutdot"></div><div class="inlab" id="inlab"></div></div></div></div>
+        <div class="rhcol"><div class="cap">오른손</div><div id="svgWrap"></div><div class="beatn" id="beatn">–</div></div>
+      </div>
+      <div class="planbox" id="planBox"></div>
+      <div class="live" id="live"></div>
+    </div>
     </div>
   </div>
 
@@ -500,13 +523,27 @@ function split(m){var mid=Math.max(0,m-2);if(m<=2)return {L:0,R:0};if(m===3)retu
 function points(m,s){
   var sp=split(m),L=sp.L,R=sp.R,CX=150,TOP=74,BOT=168,LX=54,RX=246,pts=[[CX,BOT]],i;
   for(i=0;i<L;i++){var a=(L===1)?1:(i/(L-1)),t=(L===1)?1:(0.38+0.62*a);pts.push([CX-(CX-LX)*t,BOT-(BOT-TOP)*(0.18+0.30*a)]);}
-  for(i=0;i<R;i++){var b=(R===1)?1:(i/(R-1)),u=(R===1)?1:(0.38+0.62*b);pts.push([CX+(RX-CX)*u,BOT-(BOT-TOP)*(0.20+0.42*b)]);}
-  pts.push([CX,TOP]);s=s||1;
-  return pts.map(function(p){return [150+(p[0]-150)*s, BOT-(BOT-p[1])*s];});
+  for(i=0;i<R;i++){var b=(R===1)?1:(i/(R-1)),u=(R===1)?1:(0.38+0.62*b);pts.push([CX+(RX-CX)*u,BOT-(BOT-TOP)*(0.14+0.30*b)]);}
+  pts.push([CX+24,TOP+40]);s=s||1;   /* 마지막 박: 1박보다 살짝 오른쪽·낮게 */
+  var _pas=(typeof styleOf==='function')&&ST.emo&&(styleOf().cl==='파시브');
+  var _amp=_pas?0.28:0.9;            /* 파시브는 박마다 거리를 거의 고르게 — 속도가 일정해야 하므로 */
+  if(_pas){                          /* 파시브 — 좌우 폭을 줄여 구간 길이 차이를 완화 */
+    for(var k3=1;k3<pts.length;k3++)pts[k3][0]=150+(pts[k3][0]-150)*0.74;
+  }
+
+  return pts.map(function(p,i){
+    var w=(typeof weightAt==='function')?weightAt(i,m):1;
+    var ps=s*(1+(w-1)*_amp);         /* 무게가 실린 박일수록 멀리 — 감정이 폭으로 보인다 */
+    var x=150+(p[0]-150)*ps, y=BOT-(BOT-p[1])*ps;
+    if(x<16)x=16; if(x>284)x=284;    /* 화면 밖으로 나가지 않게 */
+    if(y<20)y=20; if(y>BOT)y=BOT;
+    return [x,y];
+  });
 }
-var _n=0,_s=0;
+var _n=0,_s=0,_e='';
 function render(n,s){
-  if(_n===n&&_s===s)return;_n=n;_s=s;
+  var ek=(ST.emo?ST.emo.n:'')+'|'+(ST.emo?ST.emo.c:'');
+  if(_n===n&&_s===s&&_e===ek)return;_n=n;_s=s;_e=ek;
   var pts=points(n,s),d='M'+pts.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1);}).join(' L')+' L'+pts[0][0].toFixed(1)+','+pts[0][1].toFixed(1);
   var h='<svg viewBox="0 0 300 220"><path d="'+d+'" fill="none" stroke="rgba(255,255,255,.13)" stroke-width="1.6" stroke-dasharray="4 4"/>';
   pts.forEach(function(p,i){
@@ -515,20 +552,172 @@ function render(n,s){
   h+='<circle id="dot" cx="'+pts[pts.length-1][0].toFixed(1)+'" cy="'+pts[pts.length-1][1].toFixed(1)+'" r="12" fill="#5fe0c0"/></svg>';
   $('svgWrap').innerHTML=h;
 }
-function styleOf(){var e=ST.emo,act=(e.cl==='악티브'),sec=(e.lk==='세코');
-  return {act:act,sec:sec,te:act?1.55:1.12,arc:act?0.72:1.25,hold:sec?0.66:1.0,squash:act?1:0.35};}
-function dotAt(bp,n,ratio,grow){
-  var pts=points(n,ST.sz*(grow||1)),bi=Math.min(n-1,Math.max(0,Math.floor(bp))),fr=bp-Math.floor(bp);
-  var S=styleOf(),isLast=(bi===n-1),f=Math.min(1,fr/S.hold),rr=Math.max(0.7,Math.min(1.7,ratio||1));
-  var te=Math.pow(f,isLast?S.te*1.1:S.te);
-  var rise=(bi===0?34:(isLast?48:22))*Math.pow(rr,1.35)*S.arc;
-  var arc=rise*Math.sin(Math.PI*Math.pow(f,isLast?0.62:0.85));
-  var p0=pts[bi],p1=pts[(bi+1)%n],d=$('dot');
-  if(d){var yy=p0[1]+(p1[1]-p0[1])*te-arc;if(yy<14)yy=14;
-    d.setAttribute('cx',(p0[0]+(p1[0]-p0[0])*te).toFixed(1));d.setAttribute('cy',yy.toFixed(1));
-    var sq=(fr<0.10)?(1-fr*3.2*S.squash):1;d.setAttribute('r',(12*(0.82+0.18*sq)).toFixed(1));}
-  var lab=$('beatn');if(lab)lab.innerHTML='<b>'+(bi+1)+'</b> / '+n;
+/* ══ 지휘 주법 엔진 ══
+   악티브 — 중력·관성. 도착에 가속, 익투스에서 반짝, 반동 아치
+   파시브 — 등속. 점 없음, 반짝임 없음
+   세코   — 궤적 없음. 그 자리에서 반짝임만
+   레가토 — ∞ 궤적. 반짝이되 곡선으로 흐름
+   업비팅 — 미리 도달 → 박에서 튕겨 다음 박으로            */
+var ART={
+  /* a(어택) → 주법 */
+  '무르게':{cl:'파시브', lk:'레가토'},
+  '곧게'  :{cl:'악티브', lk:'레가토'},
+  '찌르게':{cl:'악티브', lk:'세코'}
+};
+/* 감정별 업비팅 쓰임 — 0:없음 1:마지막 박만 2:모든 박 */
+function upModeOf(e){
+  if(!e) return 0;
+  if(e.a === '무르게') return 0;                      /* 파시브는 업비팅을 쓰지 않는다 */
+  if(e.a === '찌르게'){
+    if(e.t >= 2) return 2;                            /* 세코 + 높은 긴장 → 전 박 */
+    if(e.g === 'HH' || e.g === 'HG') return 2;        /* 해학·흥겨움 — 통통 튀는 성격 */
+  }
+  if(e.e === 2) return 1;                             /* 강한 임팩트 → 마지막 박 */
+  if(e.m === 2) return 1;                             /* 크게 미는 감정 */
+  return 0;
 }
+/* 무게 곡선 — 박마다 크기·아치에 실리는 무게 */
+function weightAt(bi,n){
+  var c=ST.emo?ST.emo.c:'평평', t=(n<=1)?0:(bi/(n-1));
+  if(c==='앞무겁')  return 1.24-0.44*t;
+  if(c==='뒤무겁')  return 0.80+0.46*t;
+  if(c==='산모양')  return 0.84+0.42*Math.sin(Math.PI*t);
+  return 1;
+}
+/* 박 흔들기(루바토) — 박 안에서 밀었다 당긴다 */
+function rubato(f){
+  var m=ST.emo?ST.emo.m:0; if(!m) return f;
+  var amt=(m===2)?0.085:0.042;                  /* 1/(2\u03c0)=0.159 를 넘으면 중간에 멈춘다 */
+  return Math.max(0,Math.min(1,f+amt*Math.sin(Math.PI*2*f)));
+}
+/* 파시브 — 점을 툭 치지 않고 부드럽게 돌아 나간다 (Catmull-Rom + 등속 보정) */
+var CR_S=0.86;                                  /* 회전 반경 — 클수록 넓게 돈다 */
+function crPt(P0,P1,P2,P3,t){
+  var s=CR_S,t2=t*t,t3=t2*t;
+  var h1=2*t3-3*t2+1, h2=-2*t3+3*t2, h3=t3-2*t2+t, h4=t3-t2;
+  var m1x=s*(P2[0]-P0[0]), m1y=s*(P2[1]-P0[1]);
+  var m2x=s*(P3[0]-P1[0]), m2y=s*(P3[1]-P1[1]);
+  return [h1*P1[0]+h2*P2[0]+h3*m1x+h4*m2x,
+          h1*P1[1]+h2*P2[1]+h3*m1y+h4*m2y];
+}
+function smoothAt(pts,bi,n,f){
+  var P0=pts[(bi-1+n)%n],P1=pts[bi],P2=pts[(bi+1)%n],P3=pts[(bi+2)%n];
+  var N=12,seg=[],i,L=0,prev=crPt(P0,P1,P2,P3,0);
+  seg.push(0);
+  for(i=1;i<=N;i++){var q=crPt(P0,P1,P2,P3,i/N);L+=Math.hypot(q[0]-prev[0],q[1]-prev[1]);seg.push(L);prev=q;}
+  var want=f*L,k=1;
+  while(k<=N&&seg[k]<want)k++;
+  var a=seg[k-1],b2=seg[Math.min(k,N)],u=(b2-a>1e-6)?((want-a)/(b2-a)):0;
+  return crPt(P0,P1,P2,P3,Math.min(1,((k-1)+u)/N));   /* 등속으로 곡선 위를 간다 */
+}
+function styleOf(){
+  var e = ST.emo, A = ART[e.a] || ART['곧게'];
+  var act = (A.cl === '악티브'), sec = (A.lk === '세코');
+  return {
+    cl:A.cl, lk:A.lk, act:act, sec:sec, up:upModeOf(e),
+    te: act ? 1.55 : 1.0,          /* 파시브는 등속(지수 1) */
+    arc: act ? 0.72 : 0,           /* 파시브는 아치 없음 */
+    hold: sec ? 0.62 : 1.0,
+    squash: act ? 1 : 0.35,
+    flash: !(A.cl === '파시브')    /* 파시브만 반짝임 없음 */
+  };
+}
+/* ∞(레가토) 곡선 — 두 점 사이를 안쪽으로 휘어 흐른다 */
+function legatoOffset(bi, n, f){
+  var side = (bi % 2 === 0) ? 1 : -1;                 /* 번갈아 감기며 ∞를 만든다 */
+  return side * Math.sin(Math.PI * f) * 13;
+}
+function dotAt(bp, n, ratio, grow, isPrep){
+  var S = styleOf();
+  var pts = points(n, ST.sz * (grow || 1));
+  var bi = Math.min(n - 1, Math.max(0, Math.floor(bp))), fr = bp - Math.floor(bp);
+  var isLast = (bi === n - 1), rr = Math.max(0.7, Math.min(1.7, ratio || 1));
+  var d = $('dot'); if(!d) return;
+  var p0 = pts[bi], p1 = pts[(bi + 1) % n];
+
+  var W = weightAt(bi, n);                        /* 무게 곡선 */
+  /* 이 박·다음 박이 업비팅인가 */
+  var upNow  = (S.up === 2) || (S.up === 1 && isLast);
+  var upNext = (S.up === 2) || (S.up === 1 && (bi + 1) % n === n - 1);
+  if(isPrep){                                     /* 예비 마지막 박 = 1박으로 들어가는 준비 */
+    upNow  = false;                               /* 예비에서 튕기지 않는다 */
+    upNext = (S.up === 2) || (S.up === 1 && n === 1);   /* 1박이 업비팅이면 미리 안착 */
+    W = weightAt(0, n);                           /* 1박의 무게를 미리 싣는다 */
+    isLast = false;                               /* 1박을 향하는 궤적 */
+  }
+
+  var f = Math.min(1, fr / S.hold);
+  if(S.act) f = rubato(f);                        /* 박 흔들기는 악티브에서만 — 파시브는 등속 */
+  var te, arc = 0, off = 0, flashF = fr;
+
+  if(upNext && !upNow){
+    /* 다음 박이 업비팅 — 평소처럼 튄 뒤 재빨리 안착해 붙들고 대기 */
+    var u0 = Math.min(1, f / 0.52);
+    te = Math.pow(u0, S.act ? (isLast ? S.te * 1.1 : S.te) : 1);
+    arc = (bi === 0 ? 34 : (isLast ? 48 : 22)) * W * Math.pow(rr, 1.35) * S.arc
+          * Math.sin(Math.PI * Math.pow(u0, isLast ? 0.62 : 0.85));
+  } else if(S.sec && !upNow){
+    /* 세코 — 궤적 없이 점에 붙어 있다가 다음 박에 순간 이동 */
+    te = (fr >= 0.80) ? 1 : 0;
+    arc = 0;
+  } else if(upNow){
+    /* 업비팅 — 박에서 튕겨 곧장 다음 박 자리로 */
+    te = Math.pow(f, 0.72);
+    arc = 44 * W * Math.pow(rr, 1.2) * Math.sin(Math.PI * Math.pow(f, 0.46));
+  } else if(S.act){
+    /* 악티브 — 중력·관성. 도착에 가속하고 반동으로 튄다 */
+    te = Math.pow(f, isLast ? S.te * 1.1 : S.te);
+    arc = (bi === 0 ? 34 : (isLast ? 48 : 22)) * W * Math.pow(rr, 1.35) * S.arc
+          * Math.sin(Math.PI * Math.pow(f, isLast ? 0.62 : 0.85));
+  } else {
+    /* 파시브 — 거리와 시간이 비례하는 등속. 점을 찍지 않는다 */
+    te = f;
+    arc = 0;
+  }
+  /* 레가토면 ∞로 감아 흐른다 (세코·파시브 제외) */
+  if(S.lk === '레가토' && S.act && !upNow) off = legatoOffset(bi, n, f) * W;
+
+  var xx, yy;
+  if(isPrep){
+    /* 예비 마지막 박 — 손을 들어 올렸다가 1박으로 떨어진다 */
+    var LF = (34 + 22 * W) * (ST.sz || 1);
+    var ax = (p0[0] + p1[0]) / 2 + 8, ay = Math.min(p0[1], p1[1]) - LF;
+    if(ay < 16) ay = 16;
+    var T1 = 0.45;
+    if(f < T1){                                   /* 올림 */
+      var g = f / T1; if(S.act) g = Math.pow(g, 0.88);
+      xx = p0[0] + (ax - p0[0]) * g; yy = p0[1] + (ay - p0[1]) * g;
+    } else {                                      /* 내려꽂음 */
+      var g2 = (f - T1) / (1 - T1); if(S.act) g2 = Math.pow(g2, 1.45);
+      xx = ax + (p1[0] - ax) * g2; yy = ay + (p1[1] - ay) * g2;
+    }
+  } else {
+    if(!S.act && !S.sec && !upNow && !upNext){
+      var sm = smoothAt(pts, bi, n, te);            /* 파시브 — 점을 돌아 흐른다 */
+      xx = sm[0]; yy = sm[1];
+    } else {
+      xx = p0[0] + (p1[0] - p0[0]) * te + off;
+      yy = p0[1] + (p1[1] - p0[1]) * te - arc;
+    }
+  }
+  if(yy < 14) yy = 14;
+  d.setAttribute('cx', xx.toFixed(1));
+  d.setAttribute('cy', yy.toFixed(1));
+
+  /* 반짝임 — 파시브는 없음, 세코는 짧고 강하게 */
+  var sq = 1;
+  if(S.flash){
+    var w = S.sec ? 0.16 : 0.10;
+    if(flashF < w) sq = 1 - (flashF / w) * (S.sec ? 1.15 : 1) * S.squash;
+  }
+  d.setAttribute('r', (12 * (0.82 + 0.18 * sq) * (0.88 + 0.14 * W) * (S.sec && flashF < 0.16 ? 1.35 : 1)).toFixed(1));
+  d.setAttribute('opacity', (S.cl === '파시브') ? 0.82 : 1);
+
+  var lab = $('beatn');
+  if(lab) lab.innerHTML = '<b>' + (bi + 1) + '</b> / ' + n
+      + '<span class="artlab">' + S.cl + ' · ' + S.lk + (upNow ? ' · 업' : '') + '</span>';
+}
+
 /* ── 왼손 ── */
 var LH={mode:'emo',cue:0,cBars:1,cFrom:1,sus:0.5,susFrom:0,cut:true};
 var SUSN={1:'온음표',0.75:'점2분',0.5:'2분',0.375:'점4분',0.25:'4분'};
@@ -552,7 +741,53 @@ function lhOptHTML(){
   if(LH.mode==='emo')return '<span class="lb" style="letter-spacing:0;text-transform:none">'+ST.emo.n+'의 왼손 지시 — <b style="color:var(--mint)">'+ST.emo.lh+'</b></span>';
   return '<span class="lb" style="letter-spacing:0;text-transform:none">왼손은 움직이지 않아요 — 오른손만 유지하는 훈련.</span>';
 }
+/* ══ 박별 구조 지도 ══ */
+function rhPlanAt(bi, n){
+  var S = styleOf();
+  var upNow = (S.up === 2) || (S.up === 1 && bi === n - 1);
+  return (upNow ? '업' : S.cl) + '·' + S.lk;
+}
+function lhPlanAt(bi, n){
+  var m = LH.mode;
+  if(m === 'hold') return '중립';
+  if(m === 'cue'){
+    var t = (LH.cue < 0 ? n - 1 : Math.min(LH.cue, n - 1));
+    return (bi === t) ? '큐' : (bi === t - 1 ? '큐 예비' : '중립');
+  }
+  if(m === 'sus'){
+    var sf = Math.min(LH.susFrom || 0, n - 1);
+    var M = meterOf(CUR.sig), sQ = M.P[sf], eQ = Math.min(M.q, sQ + LH.sus * M.q);
+    var q = M.P[bi];
+    if(q < sQ - 1e-6) return '대기';
+    if(q < eQ - 1e-6) return '지속';
+    return (q < eQ + 1.01) ? '컷' : '해제';
+  }
+  if(m === 'cresc') return '크레셴도';
+  if(m === 'dim')   return '디크레셴도';
+  /* 정서어 — 감정의 무게 곡선을 따라 박마다 크기가 달라진다 */
+  var e = ST.emo, c = e ? e.c : '평평', t2 = (n <= 1) ? 0 : (bi / (n - 1));
+  var v = (c === '앞무겁') ? (1.24 - 0.44 * t2)
+        : (c === '뒤무겁') ? (0.80 + 0.46 * t2)
+        : (c === '산모양') ? (0.84 + 0.42 * Math.sin(Math.PI * t2)) : 1;
+  var lab = (v > 1.12) ? '크게' : (v < 0.90) ? '작게' : '중간';
+  if(/큐|지시/.test(e ? e.lh : '') && bi === n - 1) lab += '·큐';
+  if(/급정지|정지/.test(e ? e.lh : '') && bi === n - 1) lab = '컷';
+  return lab;
+}
+function planCard(){
+  var el = $('planBox'); if(!el) return;
+  var n = meterOf(CUR.sig).n, i;
+  var rh = '', lh = '';
+  for(i = 0; i < n; i++){
+    rh += '<div class="pb"><i>' + (i + 1) + '</i><b>' + rhPlanAt(i, n).replace('·','<br>') + '</b></div>';
+    lh += '<div class="pb"><i>' + (i + 1) + '</i><b>' + lhPlanAt(i, n).replace('·','<br>') + '</b></div>';
+  }
+  el.innerHTML =
+    '<div class="planrow"><div class="planh">오른손</div><div class="plangrid">' + rh + '</div></div>' +
+    '<div class="planrow"><div class="planh">왼손</div><div class="plangrid">' + lh + '</div></div>';
+}
 function lhSync(){
+  try{planCard();}catch(e){}
   var m=meterOf(CUR.sig).n;
   var LAB={emo:'정서어 · '+ST.emo.n,hold:'정지(중립)',
     cresc:'크레셴도 · '+LH.cBars+'마디@'+LH.cFrom,
@@ -675,14 +910,16 @@ function sched(){var a=ac(),M=meterOf(CUR.sig),spq=60/(+$('bpm').value)/((M.den=
 function frame(){
   if(!ST.playing)return;
   var a=ac(),M=meterOf(CUR.sig),spq=60/(+$('bpm').value)/((M.den===8)?1.5:1);
-  var barSec=M.q*spq,el=a.currentTime-ST.t0-barSec,grow=1;
+  var pu=(M.q-M.P[M.n-1])*spq||spq;              /* 예비박 한 박 길이 = 마지막 묶음 */
+  var PREPN=4;                                    /* 예비박 4개 */
+  var barSec=M.q*spq,el=a.currentTime-ST.t0,grow=1;   /* t0 = 본 마디 시작 */
   if(el>=0&&ST.grow){var bars=+ST.grow,mi=Math.floor(el/barSec);grow=0.72+0.5*((mi%bars)+(el%barSec)/barSec)/bars;}
   if(el<0){
-    var pIn=((a.currentTime-ST.t0)%barSec)/spq,pb=0,k;
-    for(k=0;k<M.n;k++)if(pIn>=M.P[k]-1e-6)pb=k;
-    if(pb<M.n-1)dotAt(M.n-1,M.n,1,grow);
-    else{var pl=(M.q-M.P[M.n-1])||1;dotAt(M.n-1+Math.min(0.999,(pIn-M.P[M.n-1])/pl),M.n,1,grow);}
-    lhAt(M.n-1,M.n,0,pIn/M.q);
+    var pk=Math.max(1,Math.min(PREPN,PREPN+Math.floor(el/pu)+1));
+    var last=(el>-pu);                            /* 마지막 예비박에서만 움직임 */
+    dotAt(last?(M.n-1+Math.max(0,Math.min(0.999,(el+pu)/pu))):(M.n-1),M.n,1,grow,true);
+    lhAt(M.n-1,M.n,0,0);
+    var _bn=$('beatn');if(_bn)_bn.innerHTML='<b>예비 '+(PREPN-pk+1)+'</b> / '+M.n;
   }else{
     var measIdx=Math.floor(el/barSec),inBar=(el%barSec)/spq,bi=0,i;
     for(i=0;i<M.n;i++)if(inBar>=M.P[i]-1e-6)bi=i;
@@ -695,7 +932,10 @@ function frame(){
 function toggle(){var b=$('play');
   if(ST.playing){ST.playing=false;clearInterval(SCH.timer);cancelAnimationFrame(ST.raf);b.textContent='▶ 시작';b.classList.remove('on');return;}
   var a=ac();if(a.state==='suspended')a.resume();
-  ST.playing=true;ST.t0=a.currentTime+0.12;SCH.bi=0;SCH.next=ST.t0;
+  var _M=meterOf(CUR.sig),_spq=60/(+$('bpm').value)/((_M.den===8)?1.5:1);
+  var _pu=(_M.q-_M.P[_M.n-1])*_spq||_spq;
+  ST.playing=true;ST.t0=a.currentTime+0.15+_pu*4;SCH.bi=0;SCH.next=ST.t0;
+  for(var _k=4;_k>=1;_k--){try{click(_k===1,ST.t0-_pu*_k);}catch(e){}}   /* 예비박 4개 */
   SCH.timer=setInterval(sched,25);b.textContent='■ 멈춤';b.classList.add('on');frame();}
 /* ── UI ── */
 function glyphHTML(w){
@@ -902,25 +1142,30 @@ $('axSet').addEventListener('click',function(ev){var b=ev.target.closest('.axst'
   buildChips();buildEmoSel();});
 $('axClr').addEventListener('click',function(){AXS={b:null,t:null,e:null};buildChips();buildEmoSel();});
 $('emoChips').addEventListener('click',function(ev){var b=ev.target.closest('.pill');if(!b||b.disabled)return;
-  ST.emo=EMO[+b.getAttribute('data-i')];
+  ST.emo=EMO[+b.getAttribute('data-i')];LH.mode='emo';
   if(ST.grp!=='ALL')ST.grp=ST.emo.g;
-  buildChips();buildEmoSel();emoCard();lhSync();});
-$('lhBtns').addEventListener('click',function(ev){var b=ev.target.closest('.lhx');if(!b)return;LH.mode=b.getAttribute('data-x');lhSync();});
+  buildChips();buildEmoSel();emoCard();lhSync();try{planCard();emoHeadSync();render(meterOf(CUR.sig).n,ST.sz);}catch(e){}});
+$('lhBtns').addEventListener('click',function(ev){var b=ev.target.closest('.lhx');if(!b)return;LH.mode=b.getAttribute('data-x');lhSync();try{planCard();}catch(e){}});
 document.querySelectorAll('.sz').forEach(function(b){b.addEventListener('click',function(){ST.sz=+b.getAttribute('data-s');
-  document.querySelectorAll('.sz').forEach(function(x){x.classList.toggle('on',x===b);});_n=0;render(meterOf(CUR.sig).n,ST.sz);});});
+  document.querySelectorAll('.sz').forEach(function(x){x.classList.toggle('on',x===b);});_n=0;render(meterOf(CUR.sig).n,ST.sz);});});try{emoHeadSync();}catch(e){}
 document.querySelectorAll('.gw').forEach(function(b){b.addEventListener('click',function(){ST.grow=b.getAttribute('data-g');
   document.querySelectorAll('.gw').forEach(function(x){x.classList.toggle('on',x===b);});});});
-$('sig').addEventListener('change',function(){CUR.sig=this.value;CUR.gi=0;buildSel();lhSync();_n=0;render(meterOf(CUR.sig).n,ST.sz);});
+$('sig').addEventListener('change',function(){try{setTimeout(function(){emoHeadSync();planCard();},0);}catch(e){}CUR.sig=this.value;CUR.gi=0;buildSel();lhSync();_n=0;render(meterOf(CUR.sig).n,ST.sz);});
 $('grp').addEventListener('change',function(){CUR.gi=+this.value;_n=0;render(meterOf(CUR.sig).n,ST.sz);});
-$('bpm').addEventListener('input',function(){$('bpmv').textContent=this.value;});
+$('bpm').addEventListener('input',function(){$('bpmv').textContent=this.value;try{emoHeadSync();}catch(e){}});
 $('play').addEventListener('click',toggle);
 $('grpS').addEventListener('change',function(){
   var v=this.value,list=EMO.filter(function(x){return x.g===v;});
   if(list.length)ST.emo=list[0];
-  buildEmoSel();buildChips();emoCard();lhSync();});
+  buildEmoSel();buildChips();emoCard();lhSync();try{planCard();emoHeadSync();render(meterOf(CUR.sig).n,ST.sz);}catch(e){}});
 $('emoPills').addEventListener('click',function(ev){var b=ev.target.closest('.pill');if(!b)return;
-  ST.emo=EMO[+b.getAttribute('data-i')];buildEmoSel();buildChips();emoCard();lhSync();});
-buildChips();buildEmoSel();buildSel();emoCard();principleCard();varCard();lhSync();render(meterOf(CUR.sig).n,ST.sz);
+  ST.emo=EMO[+b.getAttribute('data-i')];LH.mode='emo';buildEmoSel();buildChips();emoCard();lhSync();try{planCard();emoHeadSync();render(meterOf(CUR.sig).n,ST.sz);}catch(e){}});
+(function(){var hd=$('emoHead'),pn=$('emoPanel');
+  if(hd&&pn)hd.addEventListener('click',function(){pn.classList.toggle('closed');});})();
+function emoHeadSync(){var t=$('emoHeadT');if(!t)return;
+  var bpm=$('bpm')?$('bpm').value:'',sz={0.72:'작게',1:'보통',1.26:'크게'}[ST.sz]||'';
+  t.textContent='설정 · '+(ST.emo?ST.emo.n:'')+' · '+CUR.sig+' · \u2669'+bpm+(sz?' · '+sz:'');}
+buildChips();buildEmoSel();buildSel();emoCard();principleCard();varCard();lhSync();planCard();emoHeadSync();render(meterOf(CUR.sig).n,ST.sz);
 </script>
 </body>
 </html>
