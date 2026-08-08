@@ -217,6 +217,12 @@ header{text-align:center;margin:6px 0 16px}
 .emopanel.closed .emobody{display:none}
 .emopanel.closed .emohead{padding-bottom:2px}
 .emopanel.closed .ch{transform:rotate(-90deg)}
+.msec{font-size:.68rem;font-weight:800;color:var(--mint);letter-spacing:.1em;margin:14px 0 7px;padding-top:10px;border-top:1px solid var(--line)}
+.msec:first-of-type{border-top:0;padding-top:0;margin-top:10px}
+.mrow{margin:0 0 9px}
+.mhd{font-size:.82rem;font-weight:700;color:var(--text);display:flex;align-items:baseline;gap:7px;flex-wrap:wrap}
+.msym{font-size:.72rem;font-weight:800;color:var(--amber,#f1c47a);background:rgba(241,196,122,.12);border-radius:5px;padding:1px 6px}
+.mds{font-size:.76rem;line-height:1.65;color:var(--muted);margin-top:3px}
 .artlab{display:block;font-size:.6rem;font-weight:700;color:var(--muted);letter-spacing:.04em;margin-top:2px}
 .sigcap{font-size:.625rem;font-weight:700;color:var(--muted)}
 .gaugebox{position:absolute;bottom:0;left:0;right:0;height:66%;overflow:hidden;display:flex;align-items:flex-end}
@@ -382,11 +388,58 @@ input[type=range]{accent-color:var(--mint);flex:1;min-width:110px}
 
   <!-- 참고 -->
   <div id="pRef" class="hide">
+    <div class="card" id="meterCard"></div>
     <div class="card" id="prinCard"></div>
     <div class="card" id="varCard"></div>
   </div>
 </div>
 <script>
+/* ══ 박자 용어 ══ */
+var METERM=[
+ {g:'박자표 기호', it:[
+   ['콤먼 타임 (common time)','C','4/4. 기호 C는 반원으로, 중세의 불완전 박자(imperfect tempus)를 나타내던 표시가 굳은 것. 원(완전)은 3박, 반원(불완전)은 2박이었다.'],
+   ['알라 브레베 (alla breve)','¢','2/2. C에 세로줄을 그은 컷타임. 2분음표가 한 박이 되어 같은 음표를 절반의 박으로 센다. 긴 호흡의 프레이즈가 필요한 빠른 악장에 쓴다.'],
+   ['센차 미주라 (senza misura)','—','박자 없음. 마디선과 박자표를 두지 않고 자유롭게. 카덴차·낭송조에서.'],
+   ['아 피아체레 (a piacere)','—','연주자 임의로. 지휘자는 큐와 컷만 주고 박을 세지 않는다.']
+ ]},
+ {g:'박자의 갈래', it:[
+   ['단순박자 (simple meter)','2/4 3/4 4/4','한 박이 2분할. 8분음표 둘이 한 박.'],
+   ['겹박자 (compound meter)','6/8 9/8 12/8','한 박이 3분할. 8분음표 셋이 한 박. 6/8은 두 박이지 여섯 박이 아니다.'],
+   ['혼합박자 (irregular · additive)','5/8 7/8 11/8','2와 3이 섞인 묶음. 5/8은 3+2 또는 2+3으로, 묶음이 다르면 다른 음악이다.'],
+   ['홀·겹·넷 (duple · triple · quadruple)','2 · 3 · 4','한 마디의 박 수. 4박은 2박 둘로도 느껴져 강약이 두 층으로 생긴다.']
+ ]},
+ {g:'박 세는 방식', it:[
+   ['인 원 (in one)','—','한 마디를 한 박으로. 빠른 3/4 왈츠·스케르초. 마디가 큰 박이 된다.'],
+   ['인 투 (in two)','—','알라 브레베처럼 두 박으로 묶어 젓기. 빠른 4/4·6/8에.'],
+   ['쪼개 젓기 (subdivision)','—','한 박을 둘·셋으로 나눠 젓기. 느린 악장, 리타르단도, 앙상블이 흔들릴 때.'],
+   ['큰박·작은박 (macro · microbeat)','—','6/8의 점4분음표가 큰박, 8분음표가 작은박. 지휘는 큰박을 젓고 귀는 작은박을 센다.']
+ ]},
+ {g:'박을 흔드는 장치', it:[
+   ['못갖춘마디 (anacrusis)','—','여린내기. 첫 마디가 채워지지 않고 업비트로 시작. 예비박이 그만큼 짧아진다.'],
+   ['당김음 (syncopation)','—','약박에 무게가 실림. 지휘는 원래 박을 지켜야 당김이 들린다.'],
+   ['헤미올라 (hemiola)','—','3박 둘이 2박 셋으로 들리는 것. 3/4 두 마디가 3/2 한 마디처럼. 바로크 종지와 스페인 계열 리듬의 핵심.'],
+   ['폴리리듬 · 폴리미터','—','서로 다른 분할(3대2)이 겹치거나, 서로 다른 박자표가 동시에 진행.'],
+   ['메트릭 모듈레이션','—','앞 박의 분할값을 새 박으로 삼아 템포를 바꾸는 것. 단순 변박과 다르다.']
+ ]},
+ {g:'속도와 흐름', it:[
+   ['템포 주스토 (tempo giusto)','—','정확한 속도로. 앞의 루바토를 거두고 제자리로.'],
+   ['루바토 (rubato)','—','훔친 시간. 밀면 반드시 당겨 갚는다. 마디 총량은 유지.'],
+   ['아 템포 (a tempo)','—','원래 속도로 복귀.'],
+   ['체수라 (caesura) · 게네랄파우제','//  G.P.','전원 정지. 지휘자가 컷을 주고 다시 예비박으로 들어간다.']
+ ]}
+];
+function meterCard(){
+  var el=$('meterCard'); if(!el) return;
+  var h='<div class="ttl">박자 용어</div>';
+  METERM.forEach(function(sec){
+    h+='<div class="msec">'+sec.g+'</div>';
+    sec.it.forEach(function(x){
+      h+='<div class="mrow"><div class="mhd"><b>'+x[0]+'</b>'+(x[1]&&x[1]!=='—'?'<span class="msym">'+x[1]+'</span>':'')+'</div>'
+        +'<div class="mds">'+x[2]+'</div></div>';
+    });
+  });
+  el.innerHTML=h;
+}
 var GROUPS=[
  {id:"SL",name:"슬픔",cls:"gSL"},
  {id:"HG",name:"흥",cls:"gHG"},
@@ -494,7 +547,7 @@ var GROW=[
 var $=function(id){return document.getElementById(id);};
 var ST={emo:EMO[0],grp:'ALL',sz:1,grow:'',playing:false,t0:0,raf:null};
 var AC=null,ac=function(){if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();return AC;};
-var SIGS=['2/4','3/4','4/4','5/4','6/4','7/4','3/8','5/8','6/8','7/8','8/8','9/8','10/8','11/8','12/8','13/8','14/8','15/8'];
+var SIGS=['2/4','3/4','4/4','5/4','6/4','7/4','2/2','3/2','4/2','3/8','5/8','6/8','7/8','8/8','9/8','10/8','11/8','12/8','13/8','14/8','15/8'];
 /* 복합박 묶음 패턴 — 실제 쓰이는 조합 */
 var GOPT={
  '3/8':[[3]],'6/8':[[3,3],[2,2,2]],
@@ -1241,7 +1294,7 @@ $('emoPills').addEventListener('click',function(ev){var b=ev.target.closest('.pi
 function emoHeadSync(){var t=$('emoHeadT');if(!t)return;
   var bpm=$('bpm')?$('bpm').value:'',sz={0.72:'작게',1:'보통',1.26:'크게'}[ST.sz]||'';
   t.textContent='설정 · '+(ST.emo?ST.emo.n:'')+' · '+CUR.sig+' · \u2669'+bpm+(sz?' · '+sz:'');}
-buildChips();buildEmoSel();buildSel();emoCard();principleCard();varCard();lhSync();planCard();emoHeadSync();render(meterOf(CUR.sig).n,ST.sz);
+buildChips();buildEmoSel();buildSel();emoCard();principleCard();varCard();meterCard();lhSync();planCard();emoHeadSync();render(meterOf(CUR.sig).n,ST.sz);
 </script>
 </body>
 </html>
